@@ -1,8 +1,10 @@
-AI Interview Preparation Portal
+# AI Interview Preparation Portal
 
-- A web application that helps students prepare for technical and HR interviews using AI.
+A web application that helps students prepare for technical interviews using AI.
 
-Tech Stack
+---
+
+-- Tech Stack
 
 - Python
 - Flask
@@ -11,14 +13,43 @@ Tech Stack
 - CSS
 - JavaScript
 
-Features
+---
+
+## Features Completed
 
 - User Registration
-- User Login (Coming Soon)
-- Mock Interviews (Coming Soon)
-- AI Answer Evaluation (Coming Soon)
-- Performance Dashboard (Coming Soon)
+- Password Hashing
+- Duplicate Email Validation
+- Secure Login
+- Dashboard
 
-Author
+---
 
-Vennela Marri
+## Upcoming Features
+
+- User Sessions
+- Logout
+- Bootstrap UI
+- AI Mock Interview
+- AI Answer Evaluation
+- Performance Dashboard
+- Deployment
+
+---
+
+##  Project Structure
+
+AI-Interview-Portal/
+│
+├── app.py
+├── models.py
+├── requirements.txt
+├── README.md
+├── templates/
+├── static/
+└── instance/
+
+
+##  Author
+
+**Vennela Marri**
