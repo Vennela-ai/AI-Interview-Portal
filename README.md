@@ -51,6 +51,16 @@ AI-Interview-Portal/
 ## Latest Update
 
 - Configured Gemini AI integration for dynamic interview question generation.
+## Current Features
+
+- User Registration
+- Secure Login & Logout
+- User Profile Management
+- AI Mock Interview Setup
+- Gemini AI Question Generation
+- Flask + SQLAlchemy Backend
+- Responsive Bootstrap UI
+
 
 
 ##  Author
