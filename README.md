@@ -48,6 +48,9 @@ AI-Interview-Portal/
 ├── templates/
 ├── static/
 └── instance/
+## Latest Update
+
+- Configured Gemini AI integration for dynamic interview question generation.
 
 
 ##  Author
