@@ -1,7 +1,11 @@
+
+
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from werkzeug.security import generate_password_hash, check_password_hash
 from gemini_service import generate_questions, evaluate_answers
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import User, db
+from models import User, InterviewResult, db
+import re
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -71,11 +75,9 @@ def submit_interview():
 
     questions = []
     answers = []
-
     i = 1
 
     while True:
-
         question = request.form.get(f"question{i}")
         answer = request.form.get(f"answer{i}")
 
@@ -84,13 +86,30 @@ def submit_interview():
 
         questions.append(question)
         answers.append(answer)
-
         i += 1
 
     result = evaluate_answers(
         "\n".join(questions),
         "\n".join(answers)
     )
+
+    score = 0
+
+    match = re.search(r"Overall Score:\s*(\d+(\.\d+)?)/10", result)
+
+    if match:
+        score = float(match.group(1))
+
+    if "user_id" in session:
+        interview = InterviewResult(
+            user_id=session["user_id"],
+            interview_type="AI Mock Interview",
+            score=score,
+            feedback=result
+        )
+
+        db.session.add(interview)
+        db.session.commit()
 
     return render_template(
         "result.html",
@@ -140,5 +159,51 @@ def profile():
 
     user = User.query.get(session['user_id'])
     return render_template('profile.html', user=user)
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user = User.query.get(session['user_id'])
+
+    if request.method == 'POST':
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+
+        # Check current password
+        if not check_password_hash(user.password, current_password):
+            flash('Current password is incorrect!', 'danger')
+            return redirect(url_for('change_password'))
+
+        # Check if new passwords match
+        if new_password != confirm_password:
+            flash('New passwords do not match!', 'danger')
+            return redirect(url_for('change_password'))
+
+        # Save new password
+        user.password = generate_password_hash(new_password)
+        db.session.commit()
+
+        flash('Password changed successfully!', 'success')
+        return redirect(url_for('profile'))
+
+    return render_template('change_password.html')
+@app.route("/history")
+def history():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    interviews = InterviewResult.query.filter_by(
+        user_id=session["user_id"]
+    ).order_by(
+        InterviewResult.interview_date.desc()
+    ).all()
+
+    return render_template(
+        "history.html",
+        interviews=interviews
+    )
 if __name__ == "__main__":
     app.run(debug=True)
