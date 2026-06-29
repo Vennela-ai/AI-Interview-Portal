@@ -23,28 +23,34 @@
 
     <form method="POST">
         <div class="mb-3">
-            <label>Name</label>
-            <input type="text"
-            name="name"
-            class="form-control"
-            value="{{ user.name }}"
-            required>
+            <label class="form-label">Name</label>
+            <input
+                type="text"
+                name="name"
+                class="form-control"
+                value="{{ user.name }}"
+                required>
         </div>
 
         <div class="mb-3">
-            <label>Email</label>
-            <input type="email"
-                   name="email"
-                   class="form-control"
-                   value="{{ user.email }}"
-                   required>
+            <label class="form-label">Email</label>
+            <input
+                type="email"
+                name="email"
+                class="form-control"
+                value="{{ user.email }}"
+                required>
         </div>
 
-        <button class="btn btn-primary">
+        <button type="submit" class="btn btn-primary">
             Update Profile
         </button>
-
     </form>
+
+    <hr>
+
+    <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+    <a href="/logout" class="btn btn-danger">Logout</a>
 
 </div>
 

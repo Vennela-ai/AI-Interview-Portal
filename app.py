@@ -63,23 +63,6 @@ def register():
 @app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")
-@app.route("/profile", methods=["GET", "POST"])
-def profile():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-
-    user = User.query.get(session["user_id"])
-
-    if request.method == "POST":
-        user.name = request.form["name"]
-        user.email = request.form["email"]
-
-        db.session.commit()
-
-        flash("Profile updated successfully!", "success")
-        return redirect(url_for("profile"))
-
-    return render_template("profile.html", user=user)
 @app.route("/interview/setup")
 def interview_setup():
     return render_template("interview_setup.html")
@@ -150,5 +133,12 @@ def interview_questions():
         "interview.html",
         questions=questions
     )
+@app.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    user = User.query.get(session['user_id'])
+    return render_template('profile.html', user=user)
 if __name__ == "__main__":
     app.run(debug=True)
