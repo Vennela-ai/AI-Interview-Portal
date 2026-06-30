@@ -10,26 +10,44 @@
 
 <div class="container mt-5">
 
-    <h2>Interview History</h2>
+    <h2 class="mb-4 text-center">
+        Interview History
+    </h2>
+
+    {% if results %}
 
     <table class="table table-bordered table-hover">
 
         <thead class="table-dark">
-            <tr>
-                <th>Interview</th>
-                <th>Score</th>
-                <th>Date</th>
-            </tr>
+
+        <tr>
+
+            <th>Date</th>
+
+            <th>Interview Type</th>
+
+            <th>Score</th>
+
+            <th>Feedback</th>
+
+        </tr>
+
         </thead>
 
         <tbody>
 
-        {% for interview in interviews %}
+        {% for result in results %}
 
         <tr>
-            <td>{{ interview.interview_type }}</td>
-            <td>{{ interview.score }}/10</td>
-            <td>{{ interview.interview_date.strftime('%d-%m-%Y') }}</td>
+
+            <td>{{ result.interview_date.strftime("%d-%m-%Y %H:%M") }}</td>
+
+            <td>{{ result.interview_type }}</td>
+
+            <td>{{ "%.2f"|format(result.score) }}</td>
+
+            <td>{{ result.feedback }}</td>
+
         </tr>
 
         {% endfor %}
@@ -38,8 +56,18 @@
 
     </table>
 
+    {% else %}
+
+    <div class="alert alert-info">
+
+        You haven't taken any interviews yet.
+
+    </div>
+
+    {% endif %}
+
     <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
-        Dashboard
+        ← Back to Dashboard
     </a>
 
 </div>

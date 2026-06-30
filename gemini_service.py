@@ -32,34 +32,37 @@ Return only the numbered questions.
 
     return response.text
 def evaluate_answers(questions, answers):
-
     prompt = f"""
-You are an expert technical interviewer.
+You are an experienced technical interviewer.
 
-Evaluate the candidate's interview.
+Evaluate the candidate's answers.
 
-Questions:
-{questions}
+Return the response in exactly this format:
 
-Answers:
-{answers}
-
-Give the response in this format:
-
-Overall Score: X/10
+Overall Score: XX/100
 
 Technical Skills:
+- ...
+
 Communication:
-Confidence:
-Problem Solving:
+- ...
 
 Strengths:
-- point 1
-- point 2
+- Point 1
+- Point 2
+- Point 3
+
+Weaknesses:
+- Point 1
+- Point 2
 
 Suggestions:
-- point 1
-- point 2
+- Point 1
+- Point 2
+- Point 3
+
+Candidate Answers:
+{answers}
 """
 
     response = client.models.generate_content(

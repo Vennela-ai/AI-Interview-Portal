@@ -195,7 +195,7 @@ def history():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    interviews = InterviewResult.query.filter_by(
+    results = InterviewResult.query.filter_by(
         user_id=session["user_id"]
     ).order_by(
         InterviewResult.interview_date.desc()
@@ -203,7 +203,7 @@ def history():
 
     return render_template(
         "history.html",
-        interviews=interviews
+        results=results
     )
 if __name__ == "__main__":
     app.run(debug=True)
