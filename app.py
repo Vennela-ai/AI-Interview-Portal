@@ -3,7 +3,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from gemini_service import generate_questions, evaluate_answers
-from werkzeug.security import generate_password_hash, check_password_hash
 from models import User, InterviewResult, db
 import re
 
@@ -130,7 +129,7 @@ def submit_interview():
 
     score = 0
 
-    match = re.search(r"Overall Score:\s*(\d+(\.\d+)?)/10", result)
+    match = re.search(r"Overall Score:\s*(\d+(\.\d+)?)/100", result)
 
     if match:
         score = float(match.group(1))
@@ -171,8 +170,18 @@ def interview_questions():
     role = request.form["role"]
     experience = request.form["experience"]
     skills = request.form["skills"]
+    difficulty = request.form["difficulty"]
+    interview_type = request.form["interview_type"]
+    question_count = request.form["question_count"]
 
-    response = generate_questions(role, experience, skills)
+    response = generate_questions(
+        role,
+        experience,
+        skills,
+        difficulty,
+        interview_type,
+        question_count
+    )
 
     questions = []
 

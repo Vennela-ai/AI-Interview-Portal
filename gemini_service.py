@@ -6,21 +6,39 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-def generate_questions(role, experience, skills):
+
+def generate_questions(
+    role,
+    experience,
+    skills,
+    difficulty,
+    interview_type,
+    question_count
+):
 
     prompt = f"""
-You are an expert technical interviewer.
+You are an expert interviewer.
 
-Generate exactly 10 interview questions.
+Generate exactly {question_count} interview questions.
 
 Job Role: {role}
-Experience: {experience}
-Skills: {skills}
+Experience Level: {experience}
+Primary Skill: {skills}
+Difficulty Level: {difficulty}
+Interview Type: {interview_type}
 
-Rules:
-- 3 HR questions
-- 5 Technical questions
-- 2 Scenario-based questions
+Instructions:
+
+- Generate exactly {question_count} questions.
+- Match the selected difficulty level.
+- Focus on the selected primary skill.
+- Keep all questions relevant to the selected job role.
+
+If Interview Type is:
+- Technical → Generate only technical questions.
+- HR → Generate only HR questions.
+- Behavioral → Generate only behavioral questions.
+- Mixed → Generate a balanced mix of HR, technical, and scenario-based questions.
 
 Return only the numbered questions.
 """
@@ -31,11 +49,20 @@ Return only the numbered questions.
     )
 
     return response.text
+
+
 def evaluate_answers(questions, answers):
+
     prompt = f"""
 You are an experienced technical interviewer.
 
 Evaluate the candidate's answers.
+
+Interview Questions:
+{questions}
+
+Candidate Answers:
+{answers}
 
 Return the response in exactly this format:
 
@@ -60,9 +87,6 @@ Suggestions:
 - Point 1
 - Point 2
 - Point 3
-
-Candidate Answers:
-{answers}
 """
 
     response = client.models.generate_content(
