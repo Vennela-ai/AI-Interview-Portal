@@ -66,7 +66,42 @@ def register():
     return render_template("register.html")
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user = User.query.get(session["user_id"])
+
+    interviews = InterviewResult.query.filter_by(
+        user_id=session["user_id"]
+    ).all()
+
+    total_interviews = len(interviews)
+
+    if total_interviews > 0:
+        average_score = round(
+            sum(i.score for i in interviews) / total_interviews,
+            2
+        )
+        highest_score = max(i.score for i in interviews)
+    else:
+        average_score = 0
+        highest_score = 0
+
+    recent = InterviewResult.query.filter_by(
+        user_id=session["user_id"]
+    ).order_by(
+        InterviewResult.interview_date.desc()
+    ).limit(5).all()
+
+    return render_template(
+        "dashboard.html",
+        user=user,
+        total_interviews=total_interviews,
+        average_score=average_score,
+        highest_score=highest_score,
+        recent=recent
+    )
 @app.route("/interview/setup")
 def interview_setup():
     return render_template("interview_setup.html")

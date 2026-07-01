@@ -4,7 +4,6 @@
 <head>
 
     <meta charset="UTF-8">
-
     <title>Dashboard</title>
 
     <link rel="stylesheet"
@@ -26,58 +25,75 @@
 
     <div class="dashboard-card">
 
-        <h1 class="text-center">🤖 AI Mock Interview Portal</h1>
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center">
 
-        <p class="text-center text-muted">
-            Welcome back! Ready for your next interview?
-        </p>
+            <div>
+                <h1>🤖 AI Mock Interview Portal</h1>
+                <p class="text-muted mb-0">
+                    Welcome back! Ready for your next interview?
+                </p>
+            </div>
+
+            <div>
+
+                <a href="{{ url_for('profile') }}"
+                   class="btn btn-outline-primary me-2">
+                    👤 Profile
+                </a>
+
+                <a href="{{ url_for('logout') }}"
+                   class="btn btn-danger">
+                     Logout
+                </a>
+
+            </div>
+
+        </div>
 
         <hr>
 
-        <div class="row text-center mt-4">
+        <!-- Quick Actions -->
+        <h4 class="mb-4"> Quick Actions</h4>
 
-            <div class="col-md-4 mb-3">
+        <div class="row text-center">
+
+            <div class="col-md-6 mb-4">
 
                 <div class="stat-card">
 
-                    <h2>🎯</h2>
+                    <h1>🎯</h1>
 
-                    <h5>Start Interview</h5>
+                    <h5>Start AI Interview</h5>
 
-                    <a href="{{ url_for('interview_setup') }}" class="btn btn-success">
-                        Start
+                    <p class="text-muted">
+                        Begin a new mock interview.
+                    </p>
+
+                    <a href="{{ url_for('interview_setup') }}"
+                       class="btn btn-success">
+                        Start Interview
                     </a>
 
                 </div>
 
             </div>
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-4">
 
                 <div class="stat-card">
 
-                    <h2>📜</h2>
+                    <h1>📜</h1>
 
                     <h5>Interview History</h5>
 
-                    <a href="{{ url_for('history') }}" class="btn btn-primary">
-                        View
-                    </a>
+                    <p class="text-muted">
+                        Review previous interview results.
+                    </p>
 
-                </div>
-
-            </div>
-
-            <div class="col-md-4 mb-3">
-
-                <div class="stat-card">
-
-                    <h2>👤</h2>
-
-                    <h5>My Profile</h5>
-
-                    <a href="{{ url_for('profile') }}" class="btn btn-info">
-                        Profile
+                    <a href="{{ url_for('history') }}"
+                       class="btn btn-primary">
+                        View History
                     </a>
 
                 </div>
@@ -86,11 +102,17 @@
 
         </div>
 
-        <div class="text-center mt-4">
+        <hr>
 
-            <a href="{{ url_for('logout') }}" class="btn btn-danger btn-lg">
-                Logout
-            </a>
+        <div class="text-center">
+
+            <h5 class="text-secondary">
+                📊 Analytics Dashboard Coming Soon
+            </h5>
+
+            <p class="text-muted">
+                Track interview scores, progress charts, achievements, and detailed analytics.
+            </p>
 
         </div>
 
