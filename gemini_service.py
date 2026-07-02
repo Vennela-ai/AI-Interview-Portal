@@ -54,9 +54,9 @@ Return only the numbered questions.
 def evaluate_answers(questions, answers):
 
     prompt = f"""
-You are an experienced technical interviewer.
+You are an expert technical interviewer.
 
-Evaluate the candidate's answers.
+Evaluate the candidate's answers briefly and professionally.
 
 Interview Questions:
 {questions}
@@ -64,29 +64,39 @@ Interview Questions:
 Candidate Answers:
 {answers}
 
-Return the response in exactly this format:
+Rules:
+- Keep the entire feedback under 200 words.
+- Be direct and concise.
+- Use short bullet points.
+- Mention only the most important strengths and weaknesses.
+- Focus on what the candidate should improve.
 
-Overall Score: XX/100
+Return ONLY in this format:
 
-Technical Skills:
-- ...
+## Overall Score
+XX/100
 
-Communication:
-- ...
+## Technical Skills
+Excellent / Good / Average / Needs Improvement
 
-Strengths:
-- Point 1
-- Point 2
-- Point 3
+## Communication
+Excellent / Good / Average / Needs Improvement
 
-Weaknesses:
-- Point 1
-- Point 2
+## Key Strengths
+• Point 1
+• Point 2
 
-Suggestions:
-- Point 1
-- Point 2
-- Point 3
+## Areas to Improve
+• Point 1
+• Point 2
+
+## Focus Next
+• Topic 1
+• Topic 2
+• Topic 3
+
+## Final Verdict
+One short sentence encouraging the candidate.
 """
 
     response = client.models.generate_content(

@@ -191,6 +191,7 @@ def interview_questions():
 
         if line:
             questions.append(line)
+    session["questions"] = questions
 
     return render_template(
         "interview.html",
@@ -248,6 +249,59 @@ def history():
     return render_template(
         "history.html",
         results=results
+    )
+@app.route("/submit_answers", methods=["POST"])
+def submit_answers():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    questions = session.get("questions")
+
+    if not questions:
+        flash("Interview session expired. Please generate questions again.", "warning")
+        return redirect(url_for("interview_setup"))
+
+    answers = []
+
+    for i in range(len(questions)):
+        answers.append(request.form.get(f"answer{i+1}", "").strip())
+
+    # Get AI Evaluation
+    result = evaluate_answers(questions, answers)
+    result = result.replace("# Overall Score", "<h3>🏆 Overall Score</h3>")
+    result = result.replace("# Technical Skills", "<h3>💻 Technical Skills</h3>")
+    result = result.replace("# Communication", "<h3>🗣 Communication</h3>")
+    result = result.replace("# Strengths", "<h3>⭐ Strengths</h3>")
+    result = result.replace("# Areas to Improve", "<h3>⚠️ Areas to Improve</h3>")
+    result = result.replace("# Focus Next", "<h3>🎯 Focus Next</h3>")
+    result = result.replace("# Final Verdict", "<h3>✅ Final Verdict</h3>")
+
+    result = result.replace("\n", "<br>")
+
+    # Extract Score
+    score = 0
+
+    match = re.search(r"Overall Score:\s*(\d+(\.\d+)?)/100", result)
+
+    if match:
+        score = float(match.group(1))
+
+    # Save Interview Result
+    interview = InterviewResult(
+        user_id=session["user_id"],
+        interview_type="AI Mock Interview",
+        score=score,
+        feedback=result
+    )
+
+    db.session.add(interview)
+    db.session.commit()
+
+    return render_template(
+        "result.html",
+        result=result,
+        score=score
     )
 if __name__ == "__main__":
     app.run(debug=True)
