@@ -10,11 +10,34 @@
 
 <div class="container mt-5">
 
-    <h2 class="mb-4 text-center">
-        Interview History
-    </h2>
+    <div class="text-center mb-5">
 
+<h2>
+
+📜 Interview History
+
+</h2>
+
+<p class="text-muted">
+
+Review your previous AI interview performances.
+
+</p>
+
+</div>
     {% if results %}
+    <div class="row mb-4">
+
+<div class="col-md-6">
+
+<input
+type="text"
+class="form-control"
+placeholder="🔍 Search Interview">
+
+</div>
+
+</div>
 
     <table class="table table-bordered table-hover">
 
@@ -39,22 +62,94 @@
         {% for result in results %}
 
         <tr>
+<table class="table table-hover shadow rounded">
 
-            <td>{{ result.interview_date.strftime("%d-%m-%Y %H:%M") }}</td>
+    <thead class="table-primary">
 
-            <td>{{ result.interview_type }}</td>
+    <tr>
 
-            <td>{{ "%.2f"|format(result.score) }}</td>
+        <th>#</th>
 
-            <td>{{ result.feedback }}</td>
+        <th>Date</th>
 
-        </tr>
+        <th>Interview Type</th>
 
-        {% endfor %}
+        <th>Score</th>
 
-        </tbody>
+        <th>Status</th>
 
-    </table>
+        <th>Report</th>
+
+    </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for result in results %}
+
+    <tr>
+
+        <td>{{ loop.index }}</td>
+
+        <td>{{ result.interview_date.strftime("%d %b %Y") }}</td>
+
+        <td>{{ result.interview_type }}</td>
+
+        <td>
+
+            <strong>{{ "%.2f"|format(result.score) }}%</strong>
+
+        </td>
+
+        <td>
+
+            {% if result.score >= 85 %}
+
+                <span class="badge bg-success">
+                    Excellent
+                </span>
+
+            {% elif result.score >= 70 %}
+
+                <span class="badge bg-primary">
+                    Good
+                </span>
+
+            {% elif result.score >= 50 %}
+
+                <span class="badge bg-warning text-dark">
+                    Average
+                </span>
+
+            {% else %}
+
+                <span class="badge bg-danger">
+                    Needs Improvement
+                </span>
+
+            {% endif %}
+
+        </td>
+
+        <td>
+
+            <a href="{{ url_for('view_report', id=result.id) }}"
+               class="btn btn-sm btn-outline-primary">
+
+                👁 View
+
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
 
     {% else %}
 

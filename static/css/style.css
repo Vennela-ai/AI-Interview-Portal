@@ -14,8 +14,8 @@
 body{
     margin:0;
     min-height:100vh;
+    background:#F4F7FC;
 }
-
 .login-page{
     background:linear-gradient(135deg,#4facfe,#00f2fe);
     min-height:100vh;
@@ -166,59 +166,34 @@ body{
 .register-page .auth-link a{
     color:#9333ea;
 }
-/* Dashboard */
-
 .dashboard-page{
     background:linear-gradient(135deg,#eef2ff,#dbeafe);
     min-height:100vh;
     padding:40px 0;
 }
-
 .dashboard-card{
-
     background:white;
-
     border-radius:20px;
-
     padding:40px;
-
     box-shadow:0 15px 35px rgba(0,0,0,.15);
-
 }
-
 .stat-card{
-
     background:#f8fafc;
-
     border-radius:15px;
-
     padding:30px;
-
     transition:.3s;
-
     box-shadow:0 5px 15px rgba(0,0,0,.08);
 
 }
-
 .stat-card:hover{
-
     transform:translateY(-8px);
-
     box-shadow:0 15px 25px rgba(0,0,0,.15);
-
 }
-
 .stat-card h2{
-
     font-size:45px;
-
     margin-bottom:15px;
-
 }
 /* ================= HOME PAGE ================= */
-
-/* ================= HOME PAGE ================= */
-
 .home-page{
     min-height:100vh;
     display:flex;
@@ -298,13 +273,7 @@ footer{
     color:#E5E7EB;
     font-size:14px;
 }
-body{
-    font-family: Arial, sans-serif;
-    background:#F4F7FC;
-    margin:0;
-}
-
-.container{
+.app-container{
     width:80%;
     margin:auto;
     padding:30px;
@@ -312,35 +281,11 @@ body{
 
 .question-card{
     background:white;
-    padding:20px;
-    margin-bottom:20px;
-    border-radius:12px;
-    box-shadow:0 3px 10px rgba(0,0,0,.1);
+    padding:25px;
+    margin-bottom:25px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
-
-textarea{
-    width:100%;
-    height:120px;
-    border-radius:8px;
-    padding:10px;
-    border:1px solid #ccc;
-    resize:vertical;
-}
-
-button{
-    background:#2563EB;
-    color:white;
-    border:none;
-    padding:15px 30px;
-    border-radius:8px;
-    font-size:18px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#1D4ED8;
-}
-/* ================= INTERVIEW PAGE ================= */
 
 .interview-page{
     background:#F4F7FC;
@@ -376,16 +321,6 @@ button:hover{
     position:sticky;
     top:20px;
 }
-
-.question-card{
-    background:white;
-    padding:25px;
-    margin-bottom:25px;
-    border-radius:15px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-    transition:.3s;
-}
-
 .question-card:hover{
     transform:translateY(-3px);
 }
@@ -416,67 +351,14 @@ textarea:focus{
     border-color:#2563EB;
     box-shadow:0 0 8px rgba(37,99,235,.3);
 }
-
-.submit-btn{
-    width:100%;
-    background:#2563EB;
-    color:white;
-    padding:15px;
-    border:none;
-    border-radius:12px;
-    font-size:18px;
-    font-weight:600;
-    transition:.3s;
-}
-
-.submit-btn:hover{
-    background:#1D4ED8;
-}
 .result-box{
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,.1);
-    line-height: 1.8;
-    white-space: pre-wrap;
-}
-.result-box h3{
-    color:#2563EB;
-    margin-top:25px;
-    margin-bottom:10px;
-    border-left:5px solid #2563EB;
-    padding-left:10px;
-}
-
-.result-box{
+    background:#fff;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    white-space:pre-wrap;
     line-height:2;
 }
-.camera-box{
-    width:220px;
-    height:160px;
-    border-radius:12px;
-    overflow:hidden;
-    border:3px solid #2563EB;
-    margin-top:20px;
-}
-
-#video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-#camera-status{
-    margin-top:10px;
-    font-weight:bold;
-    color:#2563EB;
-}
-
-#warning-count{
-    color:#DC2626;
-    font-weight:bold;
-}
-
 .progress-container{
     margin-bottom:25px;
 }
@@ -516,42 +398,6 @@ textarea:focus{
     color:#6B7280;
     font-size:13px;
 }
-
-.camera-section{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:20px;
-    margin-bottom:30px;
-    flex-wrap:wrap;
-}
-
-.camera-info{
-    display:flex;
-    flex-direction:column;
-}
-
-.camera-box{
-    width:240px;
-    height:180px;
-    border-radius:15px;
-    overflow:hidden;
-    border:3px solid #2563EB;
-    background:#000;
-}
-
-#video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-#camera-status{
-    margin-top:10px;
-    font-weight:600;
-    color:#16A34A;
-}
-
 #warning-count{
     margin-top:8px;
     color:#DC2626;
@@ -559,13 +405,21 @@ textarea:focus{
 }
 
 .submit-btn{
+    width:100%;
     margin-top:25px;
-    font-size:18px;
+    background:#2563EB;
+    color:#fff;
     padding:16px;
+    border:none;
     border-radius:12px;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
 }
 
 .submit-btn:hover{
+    background:#1D4ED8;
     transform:translateY(-2px);
 }
 
@@ -576,17 +430,6 @@ textarea:focus{
         align-items:flex-start;
         gap:15px;
     }
-
-    .camera-section{
-        flex-direction:column;
-    }
-
-    .camera-box{
-        width:100%;
-        max-width:320px;
-        height:220px;
-    }
-
     .interview-container{
         width:95%;
     }
@@ -596,4 +439,36 @@ textarea:focus{
         text-align:center;
     }
 
+}
+.stat-card,
+.question-card,
+.dashboard-card,
+.hero-card,
+.auth-box{
+    transition:all .3s ease;
+}
+input:focus,
+select:focus,
+textarea:focus{
+    outline:none;
+    border-color:#2563EB;
+    box-shadow:0 0 10px rgba(37,99,235,.25);
+}
+::-webkit-scrollbar{
+    width:8px;
+}
+::-webkit-scrollbar-thumb{
+    background:#2563EB;
+    border-radius:10px;
+}
+::-webkit-scrollbar-track{
+    background:#F1F5F9;
+}
+.auth-btn,
+.submit-btn,
+.btn{
+    transition:all .3s ease;
+}
+a{
+    transition:all .3s ease;
 }
