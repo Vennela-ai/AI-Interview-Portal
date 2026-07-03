@@ -73,33 +73,49 @@ def dashboard():
 
     interviews = InterviewResult.query.filter_by(
         user_id=session["user_id"]
+    ).order_by(
+        InterviewResult.interview_date.desc()
     ).all()
 
     total_interviews = len(interviews)
 
-    if total_interviews > 0:
+    if interviews:
+
         average_score = round(
             sum(i.score for i in interviews) / total_interviews,
             2
         )
-        highest_score = max(i.score for i in interviews)
-    else:
-        average_score = 0
-        highest_score = 0
 
-    recent = InterviewResult.query.filter_by(
-        user_id=session["user_id"]
-    ).order_by(
-        InterviewResult.interview_date.desc()
-    ).limit(5).all()
+        best_score = max(i.score for i in interviews)
+
+        last_interview = interviews[0].interview_date.strftime("%d %b %Y")
+
+    else:
+
+        average_score = 0
+
+        best_score = 0
+
+        last_interview = "No Interviews"
+
+    recent = interviews[:5]
 
     return render_template(
+
         "dashboard.html",
+
         user=user,
+
         total_interviews=total_interviews,
+
         average_score=average_score,
-        highest_score=highest_score,
+
+        best_score=best_score,
+
+        last_interview=last_interview,
+
         recent=recent
+
     )
 @app.route("/interview/setup")
 def interview_setup():
@@ -269,13 +285,13 @@ def submit_answers():
 
     # Get AI Evaluation
     result = evaluate_answers(questions, answers)
-    result = result.replace("# Overall Score", "<h3>🏆 Overall Score</h3>")
-    result = result.replace("# Technical Skills", "<h3>💻 Technical Skills</h3>")
-    result = result.replace("# Communication", "<h3>🗣 Communication</h3>")
-    result = result.replace("# Strengths", "<h3>⭐ Strengths</h3>")
-    result = result.replace("# Areas to Improve", "<h3>⚠️ Areas to Improve</h3>")
-    result = result.replace("# Focus Next", "<h3>🎯 Focus Next</h3>")
-    result = result.replace("# Final Verdict", "<h3>✅ Final Verdict</h3>")
+    result = result.replace("Overall Score", "<h3>🏆 Overall Score</h3>")
+    result = result.replace(" Technical Skills", "<h3>💻 Technical Skills</h3>")
+    result = result.replace(" Communication", "<h3>🗣 Communication</h3>")
+    result = result.replace(" Strengths", "<h3>⭐ Strengths</h3>")
+    result = result.replace(" Areas to Improve", "<h3>⚠️ Areas to Improve</h3>")
+    result = result.replace(" Focus Next", "<h3>🎯 Focus Next</h3>")
+    result = result.replace(" Final Verdict", "<h3>✅ Final Verdict</h3>")
 
     result = result.replace("\n", "<br>")
 

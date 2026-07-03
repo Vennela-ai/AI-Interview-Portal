@@ -9,12 +9,18 @@
     <div class="camera-box">
     <video id="video" autoplay playsinline muted></video>
 </div>
+</head>
 
-<p id="camera-status"></p>
+<body class="interview-page">
 
-<p id="warning-count">
-    Warnings: <span id="count">0</span>/3
-</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body class="interview-page">
@@ -22,6 +28,26 @@
 <div class="interview-container">
 
     <div class="interview-header">
+        <div class="camera-section">
+
+    <div class="camera-info">
+
+        <div class="camera-box">
+            <video id="video" autoplay playsinline muted></video>
+        </div>
+
+        <p id="camera-status">
+            📷 Camera Starting...
+        </p>
+
+        <p id="warning-count">
+            ⚠ Warnings:
+            <span id="count">0</span>/3
+        </p>
+
+    </div>
+
+</div>
 
         <div>
             <h2 class="interview-title">🤖 AI Interview Portal</h2>
@@ -34,27 +60,83 @@
 
     </div>
 
+    <!-- Progress Section -->
+    <div class="progress-container">
+
+        <div class="progress-text">
+            Total Questions: {{ questions|length }}
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+
+    </div>
+
+    <!-- Camera Section -->
+    <div class="camera-section">
+
+        <div class="camera-box">
+            <video id="video" autoplay playsinline muted></video>
+        </div>
+
+        <p id="camera-status"></p>
+
+        <p id="warning-count">
+            ⚠ Warnings:
+            <span id="count">0</span>/3
+        </p>
+
+    </div>
+    <div class="progress-container">
+
+    <div class="progress-text">
+        Interview Progress
+    </div>
+
+    <div class="progress-bar">
+
+        <div class="progress-fill"></div>
+
+    </div>
+
+    <p style="margin-top:8px;color:#666;">
+        Total Questions : {{ questions|length }}
+    </p>
+
+</div>
+
     <form action="/submit_answers" method="POST">
 
         {% for question in questions %}
 
         <div class="question-card">
 
-            <h4>Question {{ loop.index }}</h4>
+            <h3 class="question-title">
 
-            <p>{{ question }}</p>
+    Question {{ loop.index }}
 
+</h3>
+
+<p>
+
+{{ question }}
+
+</p>
             <textarea
                 name="answer{{ loop.index }}"
+                rows="6"
                 placeholder="Type your answer here..."
                 required></textarea>
+
+            <small class="char-count">0 characters</small>
 
         </div>
 
         {% endfor %}
 
         <button type="submit" class="submit-btn">
-             Submit Interview
+            Submit Interview
         </button>
 
     </form>
@@ -83,11 +165,12 @@ const timer = setInterval(function () {
 
 }, 1000);
 
-
+// Disable Right Click
 document.addEventListener("contextmenu", function(e){
     e.preventDefault();
 });
 
+// Disable Copy Paste Shortcuts
 document.addEventListener("keydown", function(e){
 
     if(
@@ -100,6 +183,7 @@ document.addEventListener("keydown", function(e){
 
 });
 
+// Disable Paste
 document.querySelectorAll("textarea").forEach(area => {
 
     area.addEventListener("paste", function(e){
@@ -112,15 +196,32 @@ document.querySelectorAll("textarea").forEach(area => {
 
 });
 
+// Character Counter
+document.querySelectorAll("textarea").forEach(area => {
+
+    const counter = area.nextElementSibling;
+
+    area.addEventListener("input", function(){
+
+        counter.innerHTML =
+            area.value.length + " characters";
+
+    });
+
+});
+
+// Tab Switch Warning
 document.addEventListener("visibilitychange", function(){
 
     if(document.hidden){
 
-        alert("⚠ Warning! Do not switch tabs during the interview.");
+        addWarning("⚠ Warning! Do not switch tabs during the interview.");
 
     }
 
 });
+
+// Full Screen Mode
 window.onload = function(){
 
     if(document.documentElement.requestFullscreen){
@@ -131,26 +232,35 @@ window.onload = function(){
 
 };
 
-
+// Prevent Leaving Page
 window.onbeforeunload = function(){
 
     return "Leaving this page will end your interview.";
 
 };
+
+// Camera Access
 const video = document.getElementById("video");
 
 navigator.mediaDevices.getUserMedia({
     video:true
 })
 .then(stream=>{
+
     video.srcObject = stream;
+
     document.getElementById("camera-status").innerHTML =
-    " Camera Active";
+    "✅ Camera Active";
+
 })
 .catch(()=>{
+
     document.getElementById("camera-status").innerHTML =
     "❌ Camera Permission Denied";
+
 });
+
+// Warning System
 let warnings = 0;
 
 function addWarning(message){
@@ -161,15 +271,28 @@ function addWarning(message){
 
     alert(message);
 
-    if(warnings>=3){
+    if(warnings >= 3){
 
-        alert("Interview terminated.");
+        alert("❌ Interview terminated due to multiple violations.");
 
         document.forms[0].submit();
 
     }
 
 }
+document.querySelectorAll("textarea").forEach(area=>{
+
+    const counter=area.nextElementSibling;
+
+    area.addEventListener("input",()=>{
+
+        counter.innerHTML=
+
+        area.value.length+" characters";
+
+    });
+
+});
 
 </script>
 
