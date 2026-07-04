@@ -6,21 +6,6 @@
     <title>AI Interview</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <div class="camera-box">
-    <video id="video" autoplay playsinline muted></video>
-</div>
-</head>
-
-<body class="interview-page">
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Interview</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body class="interview-page">
@@ -97,40 +82,40 @@
 
 </div>
 
-    <form action="/submit_answers" method="POST">
+   <form action="/submit_answers" method="POST">
 
-        {% for question in questions %}
+    {% for question in questions %}
 
-        <div class="question-card">
+    <div class="question-card">
 
-            <h3 class="question-title">
+        <h3 class="question-title">
+            Question {{ loop.index }}
+        </h3>
 
-    Question {{ loop.index }}
+        <p>{{ question }}</p>
 
-</h3>
+        <input
+            type="hidden"
+            name="question{{ loop.index }}"
+            value="{{ question }}">
 
-<p>
+        <textarea
+            name="answer{{ loop.index }}"
+            rows="6"
+            placeholder="Type your answer here..."
+            required></textarea>
 
-{{ question }}
+        <small class="char-count">0 characters</small>
 
-</p>
-            <textarea
-                name="answer{{ loop.index }}"
-                rows="6"
-                placeholder="Type your answer here..."
-                required></textarea>
+    </div>
 
-            <small class="char-count">0 characters</small>
+    {% endfor %}
 
-        </div>
+    <button type="submit" class="submit-btn">
+        Submit Interview
+    </button>
 
-        {% endfor %}
-
-        <button type="submit" class="submit-btn">
-            Submit Interview
-        </button>
-
-    </form>
+</form>
 
 </div>
 

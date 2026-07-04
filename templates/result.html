@@ -21,6 +21,9 @@
         <div class="result-box">
            {{ result|safe }}
         </div>
+        <div class="feedback-box">
+    {{ feedback|safe }}
+</div>
 
         <br>
 
@@ -29,6 +32,12 @@
             <a href="/dashboard" class="submit-btn">
                 🔄 Take Another Interview
             </a>
+            <a href="{{ url_for('download_report', result_id=result.id) }}"
+                class="btn btn-primary">
+    📄 Download Report
+</a>
+
+
 
         </div>
 

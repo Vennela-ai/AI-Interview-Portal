@@ -1,10 +1,11 @@
+import re
 
-
+from pdf_generator import generate_pdf
+from flask import send_file
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from gemini_service import generate_questions, evaluate_answers
 from models import User, InterviewResult, db
-import re
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -120,51 +121,6 @@ def dashboard():
 @app.route("/interview/setup")
 def interview_setup():
     return render_template("interview_setup.html")
-@app.route("/submit-interview", methods=["POST"])
-def submit_interview():
-
-    questions = []
-    answers = []
-    i = 1
-
-    while True:
-        question = request.form.get(f"question{i}")
-        answer = request.form.get(f"answer{i}")
-
-        if not question:
-            break
-
-        questions.append(question)
-        answers.append(answer)
-        i += 1
-
-    result = evaluate_answers(
-        "\n".join(questions),
-        "\n".join(answers)
-    )
-
-    score = 0
-
-    match = re.search(r"Overall Score:\s*(\d+(\.\d+)?)/100", result)
-
-    if match:
-        score = float(match.group(1))
-
-    if "user_id" in session:
-        interview = InterviewResult(
-            user_id=session["user_id"],
-            interview_type="AI Mock Interview",
-            score=score,
-            feedback=result
-        )
-
-        db.session.add(interview)
-        db.session.commit()
-
-    return render_template(
-        "result.html",
-        result=result
-    )
 @app.route("/logout")
 def logout():
     session.clear()
@@ -272,43 +228,49 @@ def submit_answers():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    questions = session.get("questions")
-
-    if not questions:
-        flash("Interview session expired. Please generate questions again.", "warning")
-        return redirect(url_for("interview_setup"))
-
+    questions = []
     answers = []
+    i = 1
 
-    for i in range(len(questions)):
-        answers.append(request.form.get(f"answer{i+1}", "").strip())
+    while True:
+        question = request.form.get(f"question{i}")
+        answer = request.form.get(f"answer{i}")
 
-    # Get AI Evaluation
-    result = evaluate_answers(questions, answers)
-    result = result.replace("Overall Score", "<h3>🏆 Overall Score</h3>")
-    result = result.replace(" Technical Skills", "<h3>💻 Technical Skills</h3>")
-    result = result.replace(" Communication", "<h3>🗣 Communication</h3>")
-    result = result.replace(" Strengths", "<h3>⭐ Strengths</h3>")
-    result = result.replace(" Areas to Improve", "<h3>⚠️ Areas to Improve</h3>")
-    result = result.replace(" Focus Next", "<h3>🎯 Focus Next</h3>")
-    result = result.replace(" Final Verdict", "<h3>✅ Final Verdict</h3>")
+        if not question:
+            break
 
-    result = result.replace("\n", "<br>")
+        questions.append(question)
+        answers.append(answer)
 
-    # Extract Score
+        i += 1
+
+# Print AFTER the loop
+    print("Questions:")
+    print("\n".join(questions))
+
+    print("\nAnswers:")
+    print("\n".join(answers))
+
+    feedback = evaluate_answers(
+        "\n".join(questions),
+        "\n".join(answers)
+    )
+    feedback = feedback.replace("## ", "")
+    feedback = feedback.replace("•", "&#8226;")
+    feedback = feedback.replace("\n", "<br>")
+
     score = 0
 
-    match = re.search(r"Overall Score:\s*(\d+(\.\d+)?)/100", result)
+    match = re.search(r"Overall Score:\s*(\d+(\.\d+)?)/100", feedback)
 
     if match:
         score = float(match.group(1))
 
-    # Save Interview Result
     interview = InterviewResult(
         user_id=session["user_id"],
         interview_type="AI Mock Interview",
         score=score,
-        feedback=result
+        feedback=feedback
     )
 
     db.session.add(interview)
@@ -316,8 +278,28 @@ def submit_answers():
 
     return render_template(
         "result.html",
-        result=result,
-        score=score
+        score=score,
+        feedback=feedback,
+        result=interview
+    )
+@app.route("/download_report/<int:result_id>")
+def download_report(result_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    result = InterviewResult.query.get_or_404(result_id)
+
+    if result.user_id != session["user_id"]:
+        return redirect(url_for("dashboard"))
+
+    pdf = generate_pdf(result)
+
+    return send_file(
+        pdf,
+        as_attachment=True,
+        download_name=f"Interview_Report_{result.id}.pdf",
+        mimetype="application/pdf"
     )
 if __name__ == "__main__":
     app.run(debug=True)
