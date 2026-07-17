@@ -391,6 +391,32 @@ prevBtn.onclick=()=>{
 };
 
 updateQuestion();
+document.querySelectorAll("textarea").forEach((textarea, index) => {
+
+    const saved = localStorage.getItem("answer_" + index);
+
+    if (saved) {
+        textarea.value = saved;
+    }
+    textarea.addEventListener("input", () => {
+        localStorage.setItem("answer_" + index, textarea.value);
+    });
+
+});
+document.querySelector("form").addEventListener("submit", () => {
+
+    document.querySelectorAll("textarea").forEach((textarea, index) => {
+        localStorage.removeItem("answer_" + index);
+    });
+
+});
+document.querySelector("form").addEventListener("submit", function(e){
+
+    if(!confirm("Are you sure you want to submit your interview?")){
+        e.preventDefault();
+    }
+
+});
 </script>
 
 </body>
