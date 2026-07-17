@@ -653,3 +653,30 @@ textarea:focus{
     min-width:180px;
     text-align:center;
 }
+.hidden{
+    display:none;
+}
+
+.question-status{
+    text-align:center;
+    margin:20px 0;
+}
+
+.navigation-buttons{
+    display:flex;
+    justify-content:space-between;
+    margin-top:25px;
+}
+
+.nav-btn{
+    padding:12px 25px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.nav-btn:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}

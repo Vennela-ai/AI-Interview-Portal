@@ -78,12 +78,18 @@
     </p>
 
 </div>
+    <div class="question-status">
 
+    <h2 id="questionCounter">
+        Question 1 / {{ questions|length }}
+    </h2>
+
+</div>
    <form action="/submit_answers" method="POST">
 
     {% for question in questions %}
 
-    <div class="question-card">
+    <div class="question-card {% if loop.index != 1 %}hidden{% endif %}">
 
     <div class="question-number">
 
@@ -117,13 +123,32 @@
 
 </div>
     {% endfor %}
+<div class="navigation-buttons">
 
-    <button class="submit-btn">
+    <button
+        type="button"
+        id="prevBtn"
+        class="nav-btn"
+        disabled>
+        ⬅ Previous
+    </button>
 
-    🚀 Submit Interview
+    <button
+        type="button"
+        id="nextBtn"
+        class="nav-btn">
+        Next ➜
+    </button>
 
-</button>
+    <button
+        type="submit"
+        id="submitBtn"
+        class="submit-btn"
+        style="display:none;">
+        🚀 Submit Interview
+    </button>
 
+</div>
 </form>
 
 </div>
@@ -298,7 +323,74 @@ document.querySelectorAll("textarea").forEach(area=>{
     });
 
 });
+const cards = document.querySelectorAll(".question-card");
 
+let currentQuestion = 0;
+
+const totalQuestions = cards.length;
+
+const nextBtn = document.getElementById("nextBtn");
+const prevBtn = document.getElementById("prevBtn");
+const submitBtn = document.getElementById("submitBtn");
+
+const counter = document.getElementById("questionCounter");
+const progressFill = document.querySelector(".progress-fill");
+
+function updateQuestion(){
+
+    cards.forEach(card=>card.classList.add("hidden"));
+
+    cards[currentQuestion].classList.remove("hidden");
+
+    counter.innerHTML =
+        `Question ${currentQuestion+1} / ${totalQuestions}`;
+
+    prevBtn.disabled = currentQuestion===0;
+
+    if(currentQuestion===totalQuestions-1){
+
+        nextBtn.style.display="none";
+        submitBtn.style.display="inline-block";
+
+    }else{
+
+        nextBtn.style.display="inline-block";
+        submitBtn.style.display="none";
+
+    }
+
+    let percent =
+        ((currentQuestion+1)/totalQuestions)*100;
+
+    progressFill.style.width=percent+"%";
+
+}
+
+nextBtn.onclick=()=>{
+
+    if(currentQuestion<totalQuestions-1){
+
+        currentQuestion++;
+
+        updateQuestion();
+
+    }
+
+};
+
+prevBtn.onclick=()=>{
+
+    if(currentQuestion>0){
+
+        currentQuestion--;
+
+        updateQuestion();
+
+    }
+
+};
+
+updateQuestion();
 </script>
 
 </body>
