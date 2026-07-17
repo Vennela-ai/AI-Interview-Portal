@@ -13,61 +13,49 @@
 <div class="interview-container">
 
     <div class="interview-header">
-        <div class="camera-section">
 
     <div class="camera-info">
-
         <div class="camera-box">
             <video id="video" autoplay playsinline muted></video>
         </div>
 
-        <p id="camera-status">
-            📷 Camera Starting...
-        </p>
+        <p id="camera-status">📷 Camera Starting...</p>
 
         <p id="warning-count">
             ⚠ Warnings:
             <span id="count">0</span>/3
         </p>
+    </div>
 
+    <div class="header-content">
+        <h1 class="interview-title">
+            🤖 AI Interview Portal
+        </h1>
+
+        <p class="subtitle">
+            Complete all questions before the timer ends.
+        </p>
+    </div>
+
+    <div class="timer-container">
+        <span class="timer-label">Remaining Time</span>
+
+        <div class="timer" id="timer">
+            20:00
+        </div>
     </div>
 
 </div>
 
-        <div>
-            <h2 class="interview-title">🤖 AI Interview Portal</h2>
-            <p>Answer all the questions before the timer ends.</p>
-        </div>
-
-        <div class="timer" id="timer">
-            ⏱ 20:00
-        </div>
-
-    </div>
-
     <!-- Progress Section -->
     <div class="progress-container">
 
-        <div class="progress-text">
-            Total Questions: {{ questions|length }}
-        </div>
+    <div class="progress-top">
 
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
-        </div>
+        <span>Interview Progress</span>
 
-    </div>
+        <span>{{ questions|length }} Questions</span>
 
-    <!-- Camera Section -->
-    <p id="warning-count">
-    Warnings: <span id="count">0</span>/3
-</p>
-
-<video id="video" autoplay playsinline muted style="display:none;"></video>
-    <div class="progress-container">
-
-    <div class="progress-text">
-        Interview Progress
     </div>
 
     <div class="progress-bar">
@@ -75,6 +63,15 @@
         <div class="progress-fill"></div>
 
     </div>
+
+</div>
+
+    <!-- Camera Section -->
+    <p id="warning-count">
+    Warnings: <span id="count">0</span>/3
+</p>
+
+<video id="video" autoplay playsinline muted style="display:none;"></video>
 
     <p style="margin-top:8px;color:#666;">
         Total Questions : {{ questions|length }}
@@ -88,32 +85,44 @@
 
     <div class="question-card">
 
-        <h3 class="question-title">
-            Question {{ loop.index }}
-        </h3>
+    <div class="question-number">
 
-        <p>{{ question }}</p>
-
-        <input
-            type="hidden"
-            name="question{{ loop.index }}"
-            value="{{ question }}">
-
-        <textarea
-            name="answer{{ loop.index }}"
-            rows="6"
-            placeholder="Type your answer here..."
-            required></textarea>
-
-        <small class="char-count">0 characters</small>
+        Question {{ loop.index }}
 
     </div>
 
+    <div class="question-text">
+
+        {{ question }}
+
+    </div>
+
+    <input
+        type="hidden"
+        name="question{{ loop.index }}"
+        value="{{ question }}">
+
+    <textarea
+        name="answer{{ loop.index }}"
+        placeholder="Write your answer here..."
+        required></textarea>
+
+    <div class="bottom-row">
+
+        <small class="char-count">
+            0 characters
+        </small>
+
+    </div>
+
+</div>
     {% endfor %}
 
-    <button type="submit" class="submit-btn">
-        Submit Interview
-    </button>
+    <button class="submit-btn">
+
+    🚀 Submit Interview
+
+</button>
 
 </form>
 
@@ -121,25 +130,45 @@
 
 <script>
 
+const timerElement = document.getElementById("timer");
+
 let timeLeft = 20 * 60;
 
-const timer = setInterval(function () {
+const timer = setInterval(() => {
 
     let minutes = Math.floor(timeLeft / 60);
     let seconds = timeLeft % 60;
 
-    document.getElementById("timer").innerHTML =
-        "⏱ " + minutes + ":" + String(seconds).padStart(2, "0");
+    timerElement.innerHTML =
+        minutes + ":" + String(seconds).padStart(2,"0");
 
-    if (timeLeft <= 0) {
+    if(timeLeft <= 300){
+
+        timerElement.classList.add("warning");
+
+    }
+
+    if(timeLeft <= 60){
+
+        timerElement.classList.remove("warning");
+
+        timerElement.classList.add("danger");
+
+    }
+
+    if(timeLeft <= 0){
+
         clearInterval(timer);
-        alert("⏰ Time is up! Your interview will be submitted.");
+
+        alert("Time Up!");
+
         document.forms[0].submit();
+
     }
 
     timeLeft--;
 
-}, 1000);
+},1000);
 
 // Disable Right Click
 document.addEventListener("contextmenu", function(e){
