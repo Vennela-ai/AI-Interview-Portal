@@ -21,25 +21,99 @@
         <div class="result-box">
            {{ result|safe }}
         </div>
-        <div class="feedback-box">
-    {{ feedback|safe }}
+       <div class="result-header">
+
+<h1>🎉 Interview Completed</h1>
+
+<p>Your interview has been evaluated successfully.</p>
+
+</div>
+        <div class="score-card">
+
+<h2>Overall Score</h2>
+
+<div class="score-circle">
+
+{{ score }}/100
+
 </div>
 
-        <br>
+</div>
+<div class="score-progress">
 
-        <div style="text-align:center;">
+<div class="progress">
 
-            <a href="/dashboard" class="submit-btn">
-                🔄 Take Another Interview
-            </a>
-            <a href="{{ url_for('download_report', result_id=result.id) }}"
-                class="btn btn-primary">
-    📄 Download Report
-</a>
+<div class="progress-fill"style="width:{{score}}%;">
 
+</div>
 
+</div>
 
-        </div>
+<p>{{score}}%</p>
+
+</div>
+<div class="feedback-card">
+
+<h2>🤖 AI Feedback</h2>
+
+<div class="feedback-box">
+
+{{ feedback|safe }}
+
+</div>
+
+</div>
+<div class="stats-grid">
+
+<div class="stat">
+
+<h3>{{ total_questions }}</h3>
+
+<p>Total Questions</p>
+
+</div>
+
+<div class="stat">
+
+<h3>{{ answered }}</h3>
+
+<p>Answered</p>
+
+</div>
+
+<div class="stat">
+
+<h3>{{ warnings }}</h3>
+
+<p>Warnings</p>
+
+</div>
+
+<div class="stat">
+
+<h3>{{ score }}</h3>
+
+<p>Score</p>
+
+</div>
+
+</div>
+<div class="result-buttons">
+
+    <a href="/interview/setup" class="action-btn retry-btn">
+        🔄 Take Another Interview
+    </a>
+
+    <a href="{{ url_for('download_report', result_id=result.id) }}"
+       class="action-btn download-btn">
+        📄 Download Report
+    </a>
+
+    <a href="/dashboard" class="action-btn dashboard-btn">
+        🏠 Dashboard
+    </a>
+
+</div>
 
     </div>
 
