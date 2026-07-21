@@ -1,0 +1,259 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#eef3f8;
+    min-height:100vh;
+}
+.interview-container{
+
+    width:90%;
+    max-width:950px;
+
+    margin:40px auto;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+
+    overflow:hidden;
+
+}
+.interview-header{
+
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+
+    color:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:30px;
+
+}
+
+.interview-header h1{
+
+    font-size:30px;
+
+}
+
+.interview-header p{
+
+    margin-top:8px;
+
+    opacity:.9;
+
+}
+.timer-box{
+
+    background:white;
+
+    color:#2563eb;
+
+    padding:18px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+    min-width:130px;
+
+}
+
+.timer-box span{
+
+    font-size:13px;
+
+}
+
+.timer-box h2{
+
+    margin-top:8px;
+
+    font-size:30px;
+
+}
+.progress-section{
+
+    padding:25px 35px;
+
+}
+
+.progress-info{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:12px;
+
+    font-weight:600;
+
+}
+
+.progress-bar{
+
+    width:100%;
+
+    height:12px;
+
+    background:#dfe6ee;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+}
+
+.progress-fill{
+    height:100%;
+    width:10%;
+    background:linear-gradient(to right,#22c55e,#16a34a);
+    transition:.4s;
+}
+textarea{
+    width:100%;
+    height:220px;
+    margin-top:25px;
+    padding:18px;
+    border:2px solid #d1d5db;
+    border-radius:12px;
+    resize:none;
+    font-size:16px;
+    transition:.3s;
+
+}
+
+textarea:focus{
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 12px rgba(37,99,235,.2);
+
+}
+.bottom-row{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    margin-top:12px;
+
+    color:#666;
+
+}
+.navigation-buttons{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:30px 35px;
+
+}
+.nav-btn,
+.submit-btn{
+
+    padding:14px 35px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.nav-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.nav-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+.submit-btn{
+
+    background:#16a34a;
+
+    color:white;
+
+}
+
+.submit-btn:hover{
+
+    background:#15803d;
+
+}
+
+.nav-btn:disabled{
+
+    background:#bfc7d5;
+
+    cursor:not-allowed;
+
+}
+.hidden{
+
+    display:none;
+
+}
+@media(max-width:768px){
+
+.interview-header{
+
+    flex-direction:column;
+
+    gap:20px;
+
+    text-align:center;
+
+}
+
+.navigation-buttons{
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.nav-btn,
+.submit-btn{
+
+    width:100%;
+
+}
+
+.question-text{
+
+    font-size:18px;
+
+}
+
+}

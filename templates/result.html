@@ -5,41 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interview Result</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body class="dashboard-page">
 
-<div class="interview-container">
+<div class="result-container">
 
-    <div class="dashboard-card">
+    <div class="result-header">
 
-        <h2 style="text-align:center;">🏆 Interview Result</h2>
+        <h1>🎉 Interview Completed</h1>
 
-        <hr>
+        <p>Your interview has been evaluated successfully.</p>
 
-        <div class="result-box">
-           {{ result|safe }}
+    </div>
+
+    <div class="score-card">
+
+        <h2>Overall Score</h2>
+
+        <div class="score-circle">
+
+            {{ score }}/100
+
         </div>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill"style="width: {{ score }}%;">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="feedback-card">
+
+        <h2>🤖 AI Feedback</h2>
+
         <div class="feedback-box">
-    {{ feedback|safe }}
-</div>
 
-        <br>
-
-        <div style="text-align:center;">
-
-            <a href="/dashboard" class="submit-btn">
-                🔄 Take Another Interview
-            </a>
-            <a href="{{ url_for('download_report', result_id=result.id) }}"
-                class="btn btn-primary">
-    📄 Download Report
-</a>
-
-
+            {{ feedback|safe }}
 
         </div>
+
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h3>{{ total_questions }}</h3>
+            <p>Total Questions</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ answered_questions }}</h3>
+            <p>Answered</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ score }}</h3>
+            <p>Score</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ result.interview_date.strftime('%d %b %Y') }}</h3>
+            <p>Date</p>
+        </div>
+
+    </div>
+
+    <div class="result-buttons">
+
+        <a href="/interview/setup"
+           class="action-btn retry-btn">
+
+            🔄 Take Another Interview
+
+        </a>
+
+        <a href="{{ url_for('download_report', result_id=result.id) }}"
+           class="action-btn download-btn">
+
+            📄 Download Report
+
+        </a>
+
+        <a href="/dashboard"
+           class="action-btn dashboard-btn">
+
+            🏠 Dashboard
+
+        </a>
 
     </div>
 

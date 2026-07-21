@@ -3,303 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Interview</title>
+    <title>AI Interview Portal</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/interview.css') }}">
 </head>
 
-<body class="interview-page">
+<body>
 
 <div class="interview-container">
 
+    <!-- Header -->
+
     <div class="interview-header">
 
-    <div class="camera-info">
-        <div class="camera-box">
-            <video id="video" autoplay playsinline muted></video>
+        <div>
+
+            <h1>🤖 AI Interview Portal</h1>
+
+            <p>AI Powered Mock Interview</p>
+
         </div>
 
-        <p id="camera-status">📷 Camera Starting...</p>
+        <div class="timer-box">
 
-        <p id="warning-count">
-            ⚠ Warnings:
-            <span id="count">0</span>/3
-        </p>
-    </div>
+            <span>Remaining Time</span>
 
-    <div class="header-content">
-        <h1 class="interview-title">
-            🤖 AI Interview Portal
-        </h1>
+            <h2 id="timer">20:00</h2>
 
-        <p class="subtitle">
-            Complete all questions before the timer ends.
-        </p>
-    </div>
-
-    <div class="timer-container">
-        <span class="timer-label">Remaining Time</span>
-
-        <div class="timer" id="timer">
-            20:00
         </div>
+
     </div>
+
+    <!-- Progress -->
+
+    <div class="progress-section">
+
+        <div class="progress-info">
+
+            <span id="questionCounter">
+                Question 1 / {{ questions|length }}
+            </span>
+
+            <span id="progressText">
+                10%
+            </span>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill"></div>
+
+        </div>
+
+    </div>
+
+    <!-- Interview Form -->
+
+    <form id="interviewForm"
+          action="{{ url_for('submit_answers') }}"
+          method="POST">
+
+        {% for question in questions %}
+
+        <div class="question-card {% if not loop.first %}hidden{% endif %}">
+
+            <h3>
+                Question {{ loop.index }}
+            </h3>
+
+            <p class="question-text">
+
+                {{ question }}
+
+            </p>
+
+            <input
+                type="hidden"
+                name="question{{ loop.index }}"
+                value="{{ question }}">
+
+            <textarea
+
+                name="answer{{ loop.index }}"
+
+                placeholder="Type your answer here..."
+
+                required>
+
+            </textarea>
+
+            <div class="bottom-row">
+
+                <small class="char-count">
+                    0 Characters
+                </small>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+        <!-- Navigation -->
+
+        <div class="navigation-buttons">
+
+            <button
+                type="button"
+                id="prevBtn"
+                class="nav-btn"
+                disabled>
+
+                ⬅ Previous
+
+            </button>
+
+            <button
+                type="button"
+                id="nextBtn"
+                class="nav-btn">
+
+                Next ➜
+
+            </button>
+
+            <button
+                type="submit"
+                id="submitBtn"
+                class="submit-btn hidden">
+
+                🚀 Submit Interview
+
+            </button>
+
+        </div>
+
+    </form>
 
 </div>
 
-    <!-- Progress Section -->
-    <div class="progress-container">
-
-    <div class="progress-top">
-
-        <span>Interview Progress</span>
-
-        <span>{{ questions|length }} Questions</span>
-
-    </div>
-
-    <div class="progress-bar">
-
-        <div class="progress-fill"></div>
-
-    </div>
-
-</div>
-
-    <!-- Camera Section -->
-    <p id="warning-count">
-    Warnings: <span id="count">0</span>/3
-</p>
-
-<video id="video" autoplay playsinline muted style="display:none;"></video>
-
-    <p style="margin-top:8px;color:#666;">
-        Total Questions : {{ questions|length }}
-    </p>
-
-</div>
-
-   <form action="/submit_answers" method="POST">
-
-    {% for question in questions %}
-
-    <div class="question-card">
-
-    <div class="question-number">
-
-        Question {{ loop.index }}
-
-    </div>
-
-    <div class="question-text">
-
-        {{ question }}
-
-    </div>
-
-    <input
-        type="hidden"
-        name="question{{ loop.index }}"
-        value="{{ question }}">
-
-    <textarea
-        name="answer{{ loop.index }}"
-        placeholder="Write your answer here..."
-        required></textarea>
-
-    <div class="bottom-row">
-
-        <small class="char-count">
-            0 characters
-        </small>
-
-    </div>
-
-</div>
-    {% endfor %}
-
-    <button class="submit-btn">
-
-    🚀 Submit Interview
-
-</button>
-
-</form>
-
-</div>
-
-<script>
-
-const timerElement = document.getElementById("timer");
-
-let timeLeft = 20 * 60;
-
-const timer = setInterval(() => {
-
-    let minutes = Math.floor(timeLeft / 60);
-    let seconds = timeLeft % 60;
-
-    timerElement.innerHTML =
-        minutes + ":" + String(seconds).padStart(2,"0");
-
-    if(timeLeft <= 300){
-
-        timerElement.classList.add("warning");
-
-    }
-
-    if(timeLeft <= 60){
-
-        timerElement.classList.remove("warning");
-
-        timerElement.classList.add("danger");
-
-    }
-
-    if(timeLeft <= 0){
-
-        clearInterval(timer);
-
-        alert("Time Up!");
-
-        document.forms[0].submit();
-
-    }
-
-    timeLeft--;
-
-},1000);
-
-// Disable Right Click
-document.addEventListener("contextmenu", function(e){
-    e.preventDefault();
-});
-
-// Disable Copy Paste Shortcuts
-document.addEventListener("keydown", function(e){
-
-    if(
-        e.ctrlKey &&
-        ["c","v","x","a","u","s"].includes(e.key.toLowerCase())
-    ){
-        e.preventDefault();
-        alert("⚠ This action is disabled during the interview.");
-    }
-
-});
-
-// Disable Paste
-document.querySelectorAll("textarea").forEach(area => {
-
-    area.addEventListener("paste", function(e){
-
-        e.preventDefault();
-
-        alert("⚠ Pasting answers is not allowed.");
-
-    });
-
-});
-
-// Character Counter
-document.querySelectorAll("textarea").forEach(area => {
-
-    const counter = area.nextElementSibling;
-
-    area.addEventListener("input", function(){
-
-        counter.innerHTML =
-            area.value.length + " characters";
-
-    });
-
-});
-
-// Tab Switch Warning
-document.addEventListener("visibilitychange", function(){
-
-    if(document.hidden){
-
-        addWarning("⚠ Warning! Do not switch tabs during the interview.");
-
-    }
-
-});
-
-// Full Screen Mode
-window.onload = function(){
-
-    if(document.documentElement.requestFullscreen){
-
-        document.documentElement.requestFullscreen();
-
-    }
-
-};
-
-// Prevent Leaving Page
-window.onbeforeunload = function(){
-
-    return "Leaving this page will end your interview.";
-
-};
-
-// Camera Access
-const video = document.getElementById("video");
-
-navigator.mediaDevices.getUserMedia({
-    video:true
-})
-.then(stream=>{
-
-    video.srcObject = stream;
-
-    document.getElementById("camera-status").innerHTML =
-    "✅ Camera Active";
-
-})
-.catch(()=>{
-
-    document.getElementById("camera-status").innerHTML =
-    "❌ Camera Permission Denied";
-
-});
-
-// Warning System
-let warnings = 0;
-
-function addWarning(message){
-
-    warnings++;
-
-    document.getElementById("count").innerHTML = warnings;
-
-    alert(message);
-
-    if(warnings >= 3){
-
-        alert("❌ Interview terminated due to multiple violations.");
-
-        document.forms[0].submit();
-
-    }
-
-}
-document.querySelectorAll("textarea").forEach(area=>{
-
-    const counter=area.nextElementSibling;
-
-    area.addEventListener("input",()=>{
-
-        counter.innerHTML=
-
-        area.value.length+" characters";
-
-    });
-
-});
-
-</script>
+<script src="{{ url_for('static', filename='js/interview.js') }}"></script>
 
 </body>
 </html>

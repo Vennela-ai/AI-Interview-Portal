@@ -277,11 +277,13 @@ def submit_answers():
     db.session.commit()
 
     return render_template(
-        "result.html",
-        score=score,
-        feedback=feedback,
-        result=interview
-    )
+    "result.html",
+    score=score,
+    feedback=feedback,
+    result=interview,
+    total_questions=len(questions),
+    answered_questions=len([a for a in answers if a.strip()])
+)
 @app.route("/download_report/<int:result_id>")
 def download_report(result_id):
 
