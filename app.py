@@ -282,8 +282,7 @@ def submit_answers():
     feedback=feedback,
     result=interview,
     total_questions=len(questions),
-    answered=len(answers),
-    warnings=session.get("warnings", 0)
+    answered_questions=len([a for a in answers if a.strip()])
 )
 @app.route("/download_report/<int:result_id>")
 def download_report(result_id):
