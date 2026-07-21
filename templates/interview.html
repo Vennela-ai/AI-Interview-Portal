@@ -3,42 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Interview</title>
+    <title>AI Interview Portal</title>
 
     <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/interview.css') }}">
+          href="{{ url_for('static', filename='css/interview.css') }}">
 </head>
 
-<body class="interview-page">
+<body>
 
 <div class="interview-container">
 
     <!-- Header -->
+
     <div class="interview-header">
 
         <div>
+
             <h1>🤖 AI Interview Portal</h1>
-            <p>Answer every question carefully before submitting.</p>
+
+            <p>AI Powered Mock Interview</p>
+
         </div>
 
         <div class="timer-box">
+
             <span>Remaining Time</span>
+
             <h2 id="timer">20:00</h2>
+
         </div>
 
     </div>
 
     <!-- Progress -->
+
     <div class="progress-section">
 
         <div class="progress-info">
+
             <span id="questionCounter">
                 Question 1 / {{ questions|length }}
             </span>
 
             <span id="progressText">
-                0%
+                10%
             </span>
+
         </div>
 
         <div class="progress-bar">
@@ -49,12 +59,15 @@
 
     </div>
 
-   <form id="interviewForm"
-      action="{{ url_for('submit_answers') }}"
-      method="POST">
+    <!-- Interview Form -->
+
+    <form id="interviewForm"
+          action="{{ url_for('submit_answers') }}"
+          method="POST">
+
         {% for question in questions %}
 
-        <div class="question-card {% if loop.index != 1 %}hidden{% endif %}">
+        <div class="question-card {% if not loop.first %}hidden{% endif %}">
 
             <h3>
                 Question {{ loop.index }}
@@ -72,14 +85,19 @@
                 value="{{ question }}">
 
             <textarea
+
                 name="answer{{ loop.index }}"
+
                 placeholder="Type your answer here..."
-                required></textarea>
+
+                required>
+
+            </textarea>
 
             <div class="bottom-row">
 
                 <small class="char-count">
-                    0 characters
+                    0 Characters
                 </small>
 
             </div>
@@ -114,8 +132,7 @@
             <button
                 type="submit"
                 id="submitBtn"
-                class="submit-btn"
-                style="display:none;">
+                class="submit-btn hidden">
 
                 🚀 Submit Interview
 

@@ -1,151 +1,185 @@
-
+// =========================
+// Interview Navigation
+// =========================
 
 const cards = document.querySelectorAll(".question-card");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const submitBtn = document.getElementById("submitBtn");
-const counter = document.getElementById("questionCounter");
+
 const progressFill = document.querySelector(".progress-fill");
 const progressText = document.getElementById("progressText");
-const form = document.getElementById("interviewForm");
+const questionCounter = document.getElementById("questionCounter");
 
 let currentQuestion = 0;
 const totalQuestions = cards.length;
+
+// =========================
+// Show Current Question
+// =========================
+
 function updateQuestion() {
 
     cards.forEach(card => card.classList.add("hidden"));
 
     cards[currentQuestion].classList.remove("hidden");
 
-    counter.textContent =
+    questionCounter.innerHTML =
         `Question ${currentQuestion + 1} / ${totalQuestions}`;
+
+    let percent = Math.round(((currentQuestion + 1) / totalQuestions) * 100);
+
+    progressText.innerHTML = percent + "%";
+
+    progressFill.style.width = percent + "%";
 
     prevBtn.disabled = currentQuestion === 0;
 
     if (currentQuestion === totalQuestions - 1) {
 
         nextBtn.style.display = "none";
-        submitBtn.style.display = "inline-block";
+        submitBtn.classList.remove("hidden");
 
     } else {
 
         nextBtn.style.display = "inline-block";
-        submitBtn.style.display = "none";
+        submitBtn.classList.add("hidden");
 
     }
 
-    let percent =
-        ((currentQuestion + 1) / totalQuestions) * 100;
-
-    progressFill.style.width = percent + "%";
-    progressText.textContent = Math.round(percent) + "%";
 }
+
+// =========================
+// Next
+// =========================
 
 nextBtn.addEventListener("click", () => {
 
     if (currentQuestion < totalQuestions - 1) {
 
         currentQuestion++;
+
         updateQuestion();
 
     }
 
 });
+
+// =========================
+// Previous
+// =========================
 
 prevBtn.addEventListener("click", () => {
 
     if (currentQuestion > 0) {
 
         currentQuestion--;
+
         updateQuestion();
 
     }
 
 });
 
-document.querySelectorAll("textarea").forEach((area) => {
+// =========================
+// Character Counter
+// =========================
 
-    const counter = area.parentElement.querySelector(".char-count");
+document.querySelectorAll("textarea").forEach((textarea) => {
 
-    area.addEventListener("input", () => {
+    const counter = textarea.parentElement.querySelector(".char-count");
+
+    textarea.addEventListener("input", () => {
 
         counter.textContent =
-            area.value.length + " characters";
+            textarea.value.length + " Characters";
 
     });
 
 });
 
-document.querySelectorAll("textarea").forEach((area, index) => {
+// =========================
+// Auto Save
+// =========================
 
-    const saved = localStorage.getItem("answer_" + index);
+document.querySelectorAll("textarea").forEach((textarea, index) => {
 
-    if (saved) {
+    textarea.value =
+        localStorage.getItem("answer_" + index) || "";
 
-        area.value = saved;
+    textarea.dispatchEvent(new Event("input"));
 
-    }
-
-    area.dispatchEvent(new Event("input"));
-
-    area.addEventListener("input", () => {
+    textarea.addEventListener("input", () => {
 
         localStorage.setItem(
             "answer_" + index,
-            area.value
+            textarea.value
         );
 
     });
 
 });
 
-const timer = document.getElementById("timer");
+// =========================
+// Clear Storage
+// =========================
 
-let timeLeft = 20 * 60;
+document.getElementById("interviewForm")
+.addEventListener("submit", () => {
 
-const countdown = setInterval(() => {
+    document.querySelectorAll("textarea")
+    .forEach((textarea, index) => {
 
-    let minutes = Math.floor(timeLeft / 60);
-    let seconds = timeLeft % 60;
-
-    timer.textContent =
-        `${minutes}:${String(seconds).padStart(2, "0")}`;
-
-    if (timeLeft <= 0) {
-
-        clearInterval(countdown);
-
-        alert("Time is up!");
-
-        form.submit();
-
-    }
-
-    timeLeft--;
-
-}, 1000);
-
-// ============================
-// SUBMIT
-// ============================
-
-form.addEventListener("submit", function(e){
-
-    if(!confirm("Submit your interview?")){
-
-        e.preventDefault();
-        return;
-
-    }
-
-    document.querySelectorAll("textarea").forEach((area,index)=>{
-
-        localStorage.removeItem("answer_"+index);
+        localStorage.removeItem("answer_" + index);
 
     });
 
 });
 
+// =========================
+// Submit Confirmation
+// =========================
 
+document.getElementById("interviewForm")
+.addEventListener("submit", function(e){
+
+    if(!confirm("Submit Interview?")){
+
+        e.preventDefault();
+
+    }
+
+});
+
+// =========================
+// Timer
+// =========================
+
+let timeLeft = 20 * 60;
+
+const timer = document.getElementById("timer");
+
+setInterval(() => {
+
+    let min = Math.floor(timeLeft / 60);
+
+    let sec = timeLeft % 60;
+
+    timer.innerHTML =
+        `${min}:${String(sec).padStart(2,"0")}`;
+
+    if(timeLeft <= 0){
+
+        document.getElementById("interviewForm").submit();
+
+    }
+
+    timeLeft--;
+
+},1000);
+
+// =========================
+// Initialize
+// =========================
 
 updateQuestion();
