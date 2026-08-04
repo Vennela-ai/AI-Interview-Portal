@@ -166,41 +166,147 @@ body{
 .register-page .auth-link a{
     color:#9333ea;
 }
-.dashboard-page{
-    background:linear-gradient(135deg,#eef2ff,#dbeafe);
-    min-height:100vh;
-    padding:40px 0;
-}
-.dashboard-card{
-    background:white;
-    border-radius:20px;
-    padding:40px;
-    box-shadow:0 15px 35px rgba(0,0,0,.15);
-}
-.stat-card{
-    background:#f8fafc;
-    border-radius:15px;
-    padding:30px;
-    transition:.3s;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+/* ================= DASHBOARD ================= */
 
+.dashboard-page{
+    background:linear-gradient(135deg,#EEF4FF,#F8FBFF);
+    min-height:100vh;
+    padding:50px 0;
 }
+
+.dashboard-card{
+    background:#fff;
+    border-radius:22px;
+    padding:40px;
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-3px);
+}
+
+.dashboard-card h1,
+.dashboard-card h2{
+    color:#2563EB;
+    font-weight:700;
+}
+
+.dashboard-card p{
+    color:#64748B;
+    font-size:16px;
+    line-height:1.6;
+}
+
+/* ================= STATISTICS ================= */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:25px;
+    margin:35px 0;
+}
+
+.stat-card{
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    min-height:220px;          /* Same height for all cards */
+    display:flex;
+    flex-direction:column;
+    justify-content:center;    /* Center content vertically */
+    align-items:center;
+    text-align:center;
+    border-top:5px solid #2563EB;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
 .stat-card:hover{
     transform:translateY(-8px);
-    box-shadow:0 15px 25px rgba(0,0,0,.15);
+    box-shadow:0 15px 30px rgba(37,99,235,.15);
 }
 .stat-card h2{
-    font-size:45px;
-    margin-bottom:15px;
+    font-size:42px;
+    font-weight:700;
+    color:#2563EB;
+    margin-bottom:12px;
 }
+
+.stat-card h5{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:10px;
+    color:#1F2937;
+}
+
+.stat-card p{
+    font-size:15px;
+    color:#6B7280;
+    margin:0;
+}
+
+/* ================= BUTTONS ================= */
+
+.btn,
+.auth-btn,
+.submit-btn{
+
+    padding:12px 26px;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn:hover,
+.auth-btn:hover,
+.submit-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+/* ================= TABLE ================= */
+
+.table{
+    margin-top:25px;
+    font-size:15px;
+}
+
+.table th{
+    background:#2563EB;
+    color:white;
+    font-size:16px;
+    padding:15px;
+}
+
+.table td{
+    padding:15px;
+    vertical-align:middle;
+}
+
+/* ================= BADGES ================= */
+
+.badge{
+    font-size:13px;
+    padding:8px 14px;
+    border-radius:25px;
+}
+
 /* ================= HOME PAGE ================= */
+
 .home-page{
     min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
     background:linear-gradient(135deg,#4F46E5,#06B6D4);
-    overflow:hidden;
 }
 
 .hero{
@@ -209,69 +315,135 @@ body{
 }
 
 .hero-card{
+
     max-width:900px;
+
     margin:auto;
+
     padding:60px;
+
     border-radius:25px;
 
-    background:rgba(255,255,255,0.12);
-    backdrop-filter:blur(18px);
+    background:rgba(255,255,255,.15);
 
-    border:1px solid rgba(255,255,255,0.25);
+    backdrop-filter:blur(15px);
 
-    box-shadow:0 20px 50px rgba(0,0,0,.25);
+    border:1px solid rgba(255,255,255,.25);
+
+    box-shadow:0 20px 50px rgba(0,0,0,.2);
 
     color:white;
 
     text-align:center;
+
+    animation:fadeUp .7s ease;
+
 }
 
 .hero-card h1{
-    font-size:3.4rem;
+
+    font-size:52px;
+
     font-weight:700;
+
     margin-bottom:20px;
+
 }
 
 .hero-text{
-    font-size:1.2rem;
+
+    font-size:20px;
+
     color:#E2E8F0;
+
     margin-bottom:35px;
+
+    line-height:1.8;
+
 }
+
 .hero-card .btn{
 
-    padding:12px 30px;
+    padding:14px 30px;
 
-    border-radius:10px;
-
-    font-weight:600;
+    border-radius:12px;
 
 }
 
 .hero-card h6{
 
-    margin-top:10px;
+    margin-top:15px;
 
     color:white;
 
 }
-.hero-card{
-    animation: floatUp .8s ease;
+
+footer{
+
+    margin-top:45px;
+
+    color:#E2E8F0;
+
+    font-size:14px;
+
 }
 
-@keyframes floatUp{
+/* ================= ANIMATION ================= */
+
+@keyframes fadeUp{
+
     from{
+
         opacity:0;
-        transform:translateY(40px);
+
+        transform:translateY(30px);
+
     }
+
     to{
+
         opacity:1;
+
         transform:translateY(0);
+
     }
+
 }
-footer{
-    margin-top:40px;
-    color:#E5E7EB;
-    font-size:14px;
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+
+.dashboard-card{
+
+    padding:25px;
+
+}
+
+.hero-card{
+
+    padding:35px;
+
+}
+
+.hero-card h1{
+
+    font-size:36px;
+
+}
+
+.stat-card h2{
+
+    font-size:32px;
+
+}
+
+.hero-text{
+
+    font-size:16px;
+
+}
+
 }
 .app-container{
     width:80%;
@@ -612,4 +784,19 @@ a{
 
     background:#7c3aed;
 
+}
+.dashboard-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+    margin-bottom:25px;
+}
+.dashboard-actions .btn{
+    min-width:120px;
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    font-weight:600;
 }

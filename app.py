@@ -1,5 +1,6 @@
 import re
-
+import random
+from flask import session
 from pdf_generator import generate_pdf
 from flask import send_file
 from flask import Flask, render_template, request, redirect, url_for, flash, session
@@ -205,7 +206,10 @@ def change_password():
         flash('Password changed successfully!', 'success')
         return redirect(url_for('profile'))
 
-    return render_template('change_password.html')
+    return render_template(
+        "change_password.html",
+        require_current_password=True
+)
 @app.route("/history")
 def history():
 
@@ -302,6 +306,80 @@ def download_report(result_id):
         as_attachment=True,
         download_name=f"Interview_Report_{result.id}.pdf",
         mimetype="application/pdf"
+    )
+import random
+from flask import session
+
+@app.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
+
+    if request.method == "POST":
+
+        email = request.form["email"]
+
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            flash("Email not found!", "danger")
+            return redirect(url_for("forgot_password"))
+        otp = str(random.randint(100000, 999999))
+        session["otp"] = otp
+        session["reset_email"] = email
+        print("=" * 40)
+        print("OTP:", otp)
+        print("=" * 40)
+
+        flash("OTP generated successfully. Check the terminal.", "success")
+
+        return redirect(url_for("verify_otp"))
+
+    return render_template("forgot_password.html")
+@app.route("/verify_otp", methods=["GET", "POST"])
+def verify_otp():
+
+    if request.method == "POST":
+
+        otp = request.form["otp"]
+
+        if otp == session.get("otp"):
+
+            return redirect(url_for("reset_password"))
+
+        flash("Invalid OTP", "danger")
+
+    return render_template("verify_otp.html")
+@app.route("/reset_password", methods=["GET", "POST"])
+def reset_password():
+
+    if request.method == "POST":
+
+        new_password = request.form["new_password"]
+        confirm_password = request.form["confirm_password"]
+
+        if new_password != confirm_password:
+            flash("Passwords do not match", "danger")
+            return redirect(url_for("reset_password"))
+
+        user = User.query.filter_by(email=session["reset_email"]).first()
+
+        if not user:
+            flash("User not found", "danger")
+            return redirect(url_for("forgot_password"))
+
+        user.password = generate_password_hash(new_password)
+
+        db.session.commit()
+
+        session.pop("otp", None)
+        session.pop("reset_email", None)
+
+        flash("Password reset successfully!", "success")
+
+        return redirect(url_for("login"))
+
+    return render_template(
+        "change_password.html",
+        require_current_password=False
     )
 if __name__ == "__main__":
     app.run(debug=True)
